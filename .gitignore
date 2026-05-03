@@ -1,0 +1,9 @@
+.mythos/
+__pycache__/
+*.pyc
+*.pyo
+*.log
+*.pid
+.DS_Store
+.env
+node_modules/
