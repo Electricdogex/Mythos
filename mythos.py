@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """
-Mythos 522026 Alpha
+Mythos 532026 Alpha
 
 Tiny VPS program runner.
 
 Naming sequence:
-- 522026 = month/day/year = 5/2/2026
+- 532026 = month/day/year = 5/3/2026
 - Alpha = early development build
 
 Features:
@@ -14,6 +14,7 @@ Features:
 - Backward-compatible migration from old "services" configs
 - PM2 install/update helpers
 - Basic program logs and PID management
+- Systemd startup support through installer/install.sh
 """
 
 from __future__ import annotations
@@ -32,8 +33,8 @@ from pathlib import Path
 from typing import Any
 
 
-VERSION = "522026-alpha"
-VERSION_NAME = "Mythos 522026 Alpha"
+VERSION = "532026-alpha"
+VERSION_NAME = "Mythos 532026 Alpha"
 
 BASE_DIR = Path(__file__).resolve().parent
 CONFIG_FILE = BASE_DIR / "mythos.json"
@@ -501,6 +502,8 @@ def cmd_add(args: argparse.Namespace) -> None:
 
     save_config(data)
     print(f"Added program '{args.name}' to mythos.json.")
+    if not args.manual:
+        print("Autostart: enabled. This program will start when Mythos starts on boot.")
 
 
 def cmd_remove(args: argparse.Namespace) -> None:
@@ -562,6 +565,16 @@ def cmd_pm2_status(_: argparse.Namespace) -> None:
         print("PM2 is not installed. Run: ./mythos.py install-pm2")
         return
     run_shell("pm2 status", check=False)
+
+
+def cmd_startup_status(_: argparse.Namespace) -> None:
+    require_eula()
+
+    if shutil.which("systemctl") is None:
+        print("systemctl is not available on this system.")
+        return
+
+    run_shell("systemctl status mythos --no-pager", check=False)
 
 
 def cmd_make_test(args: argparse.Namespace) -> None:
@@ -665,6 +678,9 @@ def build_parser() -> argparse.ArgumentParser:
 
     p = sub.add_parser("pm2-status", help="Show PM2 status if PM2 is installed.")
     p.set_defaults(func=cmd_pm2_status)
+
+    p = sub.add_parser("startup-status", help="Show Mythos systemd startup service status.")
+    p.set_defaults(func=cmd_startup_status)
 
     return parser
 

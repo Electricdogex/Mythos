@@ -1,6 +1,6 @@
 # Mythos End User License Agreement
 
-Build: 522026 Alpha
+Build: 532026 Alpha
 
 By installing or using Mythos, you agree to the terms below.
 
@@ -22,11 +22,17 @@ Mythos does not include Discord bots, game servers, web apps, databases, or paid
 
 Mythos can start and stop commands on your VPS. Only install it on servers you own or are allowed to manage.
 
-## 5. No warranty
+## 5. Startup behavior
+
+Mythos may install a systemd startup service so configured programs can start automatically when the VPS boots.
+
+Programs added through Mythos use autostart by default unless you add them with `--manual`.
+
+## 6. No warranty
 
 Mythos is provided as-is. It may contain bugs. You should back up important files before installing, updating, or changing server software.
 
-## 6. Installer acceptance
+## 7. Installer acceptance
 
 The Mythos self-extracting installer requires you to type ACCEPT before it extracts the Mythos files.
 
